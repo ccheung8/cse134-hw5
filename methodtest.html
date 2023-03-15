@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>methodtest</title>
+</head>
+<body>
+  <style>
+    body {
+      font-size: 100%;
+    }
+
+    main {
+      padding-top: 88px;
+      display: grid;
+      place-items: center;
+    }
+
+    label {
+      font-size: 16px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 25%;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    output {
+      line-height: 32px;
+      font-size: 16px;
+    }
+  </style>
+
+  <header>
+    <!-- Navigation -->
+    <nav id="navbar">
+      <div class="brand">
+        <a href="/index.html"><img src="images/noto_panda.webp" alt="logo"></a>
+      </div>
+      <ul>
+        <a href="/index.html">
+          <li class="active">Work</li>
+        </a>
+        <a href="/methodtest.html">
+          <li>methodtest</li>
+        </a>
+        <a href="about.html">
+          <li>Me</li>
+        </a>
+        <!-- Hamburger -->
+      </ul>
+      <a class="hamburger" href="#">
+        <img src="images/charm_menu-hamburger.svg" alt="hamburger icon">
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="methodtest">
+      <label for="idNum">ID:</label>
+      <input type="text" id="idNum" name="idNum"> <br>
+      <label for="article_name">Article Name:</label>
+      <input type="text" id="article_name" name="article_name"> <br>
+      <label for="article_body">Article Body:</label>
+      <textarea name="article_body" id="article_body" cols="30" rows="10"></textarea><br>
+    </form>
+    <div class="buttons">
+      <button id="postBtn">postBtn</button>
+      <button id="getBtn">getBtn</button>
+      <button id="putBtn">putBtn</button>
+      <button id="deleteBtn">deleteBtn</button>
+    </div>
+  
+    <output id="response"></output>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <li>
+      <ul>
+        <h6>Made with blood 🩸 sweat 💦 and tears 💧 by Calvin Cheung</h6>
+      </ul>
+    </li>
+  </footer>
+  <script type="module">
+    const methodtest = document.getElementById("methodtest");
+    const postBtn = document.getElementById("postBtn");
+    const getBtn = document.getElementById("getBtn");
+    const putBtn = document.getElementById("putBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const response = document.getElementById("response");
+
+    async function handlePost() {
+      let data = new URLSearchParams(new FormData(methodtest));
+      data.append("date", `${new Date()}`);
+      let response = await fetch('https://httpbin.org/post', {
+        method: 'post',
+        body: data
+      });
+
+      if (response.ok) {
+        let responseText = new Date();
+        responseText += await response.text();
+        document.getElementById("response").innerText = responseText;
+      } else {
+        console.log(`${response.status}`);
+      }
+
+      // clears input fields
+      document.getElementById("idNum").value = '';
+      document.getElementById("article_name").value = '';
+      document.getElementById("article_body").value = '';
+    }
+
+    async function handleGet() {
+      let response = await fetch('https://httpbin.org/get');
+
+      if (response.ok) {
+        let responseText = new Date();
+        responseText += await response.text();
+        document.getElementById("response").innerText = responseText;
+      } else {
+        console.log(`${response.status}`);
+      }
+    }
+
+    async function handlePut() {
+      let data = new URLSearchParams(new FormData(methodtest));
+      data.append("date", `${new Date()}`);
+
+      let response = await fetch('https://httpbin.org/put', {
+        method: 'put',
+        body: data
+      });
+
+      if (response.ok) {
+        let responseText = new Date();
+        responseText += await response.text();
+        document.getElementById("response").innerText = responseText;
+      } else {
+        console.log(`${response.status}`);
+      }
+
+      // clears input fields
+      document.getElementById("idNum").value = '';
+      document.getElementById("article_name").value = '';
+      document.getElementById("article_body").value = '';
+    }
+
+    async function handleDelete() {
+      let response = await fetch ('https://httpbin.org/delete', {
+        method: 'delete'
+      });
+
+      if (response.ok) {
+        let responseText = new Date();
+        responseText += await response.text();
+        document.getElementById("response").innerText = responseText;
+      } else {
+        console.log(`${response.status}`);
+      }
+    }
+
+    postBtn.addEventListener('click', handlePost);
+    getBtn.addEventListener('click', handleGet);
+    putBtn.addEventListener('click', handlePut);
+    deleteBtn.addEventListener('click', handleDelete);
+  </script>
+</body>
+</html>
